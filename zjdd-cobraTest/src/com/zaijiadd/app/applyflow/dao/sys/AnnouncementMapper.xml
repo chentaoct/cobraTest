@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zaijiadd.app.applyflow.dao.sys.AnnouncementMapper">
+  <resultMap id="BaseResultMap" type="com.zaijiadd.app.applyflow.entity.sys.Announcement">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
+    <result column="updated_time" jdbcType="TIMESTAMP" property="updatedTime" />
+    <result column="title" jdbcType="VARCHAR" property="title" />
+    <result column="content" jdbcType="VARCHAR" property="content" />
+    <result column="creater" jdbcType="INTEGER" property="creater" />
+    <result column="release_time" jdbcType="TIMESTAMP" property="releaseTime" />
+  </resultMap>
+  
+  
+   <resultMap id="VOResultMap" type="com.zaijiadd.app.applyflow.entity.sys.VOAnnouncement">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
+    <result column="updated_time" jdbcType="TIMESTAMP" property="updatedTime" />
+    <result column="title" jdbcType="VARCHAR" property="title" />
+    <result column="content" jdbcType="VARCHAR" property="content" />
+    <result column="creater" jdbcType="INTEGER" property="creater" />
+    <result column="release_time" jdbcType="TIMESTAMP" property="releaseTime" />
+    <result column="already_look" jdbcType="INTEGER" property="alreadyLook" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, created_time, updated_time, title, content, creater, release_time
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from announcement
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  
+  <select id="select" parameterType="map" resultMap="BaseResultMap">
+  	select 
+  	<include refid="Base_Column_List"/>
+ 	from announcement
+   	where creater = #{userId,jdbcType=BIGINT}
+   	order by created_time desc
+   	limit #{start,jdbcType=INTEGER}, #{end}
+  </select>
+  
+   <select id="selectCount" parameterType="map" resultType="Long">
+  	select count(1)
+ 	from announcement
+   	where creater = #{userId,jdbcType=BIGINT}
+  </select>
+  
+   <select id="selectByUserId" parameterType="map" resultMap="VOResultMap">
+  	select 
+  	<include refid="Base_Column_List"/>, t2.already_look
+ 	from announcement t1 left join user_announcement t2 on t1.id=t2.announcement_id
+   	and t2.user_id = #{userId,jdbcType=BIGINT}
+   	order by t1.created_time desc
+   	limit #{start,jdbcType=INTEGER}, #{end}
+  </select>
+  
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from announcement
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.zaijiadd.app.applyflow.entity.sys.Announcement">
+    insert into announcement (id, created_time, updated_time, 
+      title, content, creater, 
+      release_time)
+    values (#{id,jdbcType=BIGINT}, #{createdTime,jdbcType=TIMESTAMP}, #{updatedTime,jdbcType=TIMESTAMP}, 
+      #{title,jdbcType=VARCHAR}, #{content,jdbcType=VARCHAR}, #{creater,jdbcType=INTEGER}, 
+      #{releaseTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.zaijiadd.app.applyflow.entity.sys.Announcement">
+   	<selectKey resultType="java.lang.Long" order="AFTER" keyProperty="id">
+		SELECT LAST_INSERT_ID() AS id
+	</selectKey>
+    insert into announcement
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="createdTime != null">
+        created_time,
+      </if>
+      <if test="updatedTime != null">
+        updated_time,
+      </if>
+      <if test="title != null">
+        title,
+      </if>
+      <if test="content != null">
+        content,
+      </if>
+      <if test="creater != null">
+        creater,
+      </if>
+      <if test="releaseTime != null">
+        release_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="createdTime != null">
+        #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatedTime != null">
+        #{updatedTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="title != null">
+        #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="content != null">
+        #{content,jdbcType=VARCHAR},
+      </if>
+      <if test="creater != null">
+        #{creater,jdbcType=INTEGER},
+      </if>
+      <if test="releaseTime != null">
+        #{releaseTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.zaijiadd.app.applyflow.entity.sys.Announcement">
+    update announcement
+    <set>
+      <if test="createdTime != null">
+        created_time = #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatedTime != null">
+        updated_time = #{updatedTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="title != null">
+        title = #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="content != null">
+        content = #{content,jdbcType=VARCHAR},
+      </if>
+      <if test="creater != null">
+        creater = #{creater,jdbcType=INTEGER},
+      </if>
+      <if test="releaseTime != null">
+        release_time = #{releaseTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.zaijiadd.app.applyflow.entity.sys.Announcement">
+    update announcement
+    set created_time = #{createdTime,jdbcType=TIMESTAMP},
+      updated_time = #{updatedTime,jdbcType=TIMESTAMP},
+      title = #{title,jdbcType=VARCHAR},
+      content = #{content,jdbcType=VARCHAR},
+      creater = #{creater,jdbcType=INTEGER},
+      release_time = #{releaseTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  
+  <insert id="updateUserStatus" parameterType="map">
+  	insert into user_announcement (user_id, announcement_id, already_look) values(#{userId,jdbcType=BIGINT}, #{announcementId,jdbcType=BIGINT}, 1)
+  </insert>
+</mapper>

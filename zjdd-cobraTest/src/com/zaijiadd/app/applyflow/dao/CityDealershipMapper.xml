@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zaijiadd.app.applyflow.dao.CityDealershipMapper" >
+  <resultMap id="BaseResultMap" type="com.zaijiadd.app.applyflow.entity.CityDealership" >
+    <id column="city_dealership_id" property="cityDealershipId" jdbcType="INTEGER" />
+    <result column="city_type" property="cityType" jdbcType="VARCHAR" />
+    <result column="city_id" property="cityId" jdbcType="INTEGER" />
+    <result column="sell_dealership_num" property="sellDealershipNum" jdbcType="INTEGER" />
+    <result column="city_dealership_money" property="cityDealershipMoney" jdbcType="DECIMAL" />
+    <result column="created_date" property="createdDate" jdbcType="TIMESTAMP" />
+    <result column="updated_date" property="updatedDate" jdbcType="TIMESTAMP" />
+     <result column="dealership_num_able" property="dealershipNumAble" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    city_dealership_id as cityDealershipId, city_type as cityType, city_id as cityId , sell_dealership_num as sellDealershipNum,
+     city_dealership_money as cityDealershipMoney, created_date createdDate, updated_date as updatedDate ,dealership_num_able as dealershipNumAble
+  </sql>
+  
+  
+  <sql id="queryDealershipNumAble" >
+    city_dealership_id as cityDealershipId,  city_id as cityId , sell_dealership_num as sellDealershipNum,
+   dealership_num_able as dealershipNumAble
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from city_dealership
+    where city_dealership_id = #{cityDealershipId,jdbcType=INTEGER}
+  </select>
+  
+   <select id="getCityMoneyByCityId" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from city_dealership
+    where city_id = #{cityId,jdbcType=INTEGER}
+  </select>
+  
+  
+   <select id="queryDealershipNumAble" resultType="java.util.HashMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="queryDealershipNumAble" />
+    from city_dealership
+    where city_id = #{cityId,jdbcType=INTEGER}
+  </select>
+  
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from city_dealership
+    where city_dealership_id = #{cityDealershipId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.zaijiadd.app.applyflow.entity.CityDealership" >
+    insert into city_dealership (city_dealership_id, city_type, city_id, 
+      sell_dealership_num, city_dealership_money, 
+      created_date, updated_date)
+    values (#{cityDealershipId,jdbcType=INTEGER}, #{cityType,jdbcType=VARCHAR}, #{cityId,jdbcType=INTEGER}, 
+      #{sellDealershipNum,jdbcType=INTEGER}, #{cityDealershipMoney,jdbcType=DECIMAL}, 
+      #{createdDate,jdbcType=TIMESTAMP}, #{updatedDate,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.zaijiadd.app.applyflow.entity.CityDealership" >
+    insert into city_dealership
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="cityDealershipId != null" >
+        city_dealership_id,
+      </if>
+      <if test="cityType != null" >
+        city_type,
+      </if>
+      <if test="cityId != null" >
+        city_id,
+      </if>
+      <if test="sellDealershipNum != null" >
+        sell_dealership_num,
+      </if>
+      <if test="cityDealershipMoney != null" >
+        city_dealership_money,
+      </if>
+      <if test="createdDate != null" >
+        created_date,
+      </if>
+      <if test="updatedDate != null" >
+        updated_date,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="cityDealershipId != null" >
+        #{cityDealershipId,jdbcType=INTEGER},
+      </if>
+      <if test="cityType != null" >
+        #{cityType,jdbcType=VARCHAR},
+      </if>
+      <if test="cityId != null" >
+        #{cityId,jdbcType=INTEGER},
+      </if>
+      <if test="sellDealershipNum != null" >
+        #{sellDealershipNum,jdbcType=INTEGER},
+      </if>
+      <if test="cityDealershipMoney != null" >
+        #{cityDealershipMoney,jdbcType=DECIMAL},
+      </if>
+      <if test="createdDate != null" >
+        #{createdDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatedDate != null" >
+        #{updatedDate,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+   <update id="updateCityDealership" parameterType="com.zaijiadd.app.applyflow.entity.CityDealership" >
+    update city_dealership
+    <set >  
+       <if test="dealershipNumAble != null" >
+        dealership_num_able = #{dealershipNumAble,jdbcType=INTEGER},
+      </if>
+    
+    </set>
+    where city_dealership_id = #{cityDealershipId,jdbcType=INTEGER}
+  </update>
+  <update id="updateCityDealershipss" parameterType="com.zaijiadd.app.applyflow.entity.CityDealership" >
+    update city_dealership
+    <set >
+      <if test="cityType != null" >
+        city_type = #{cityType,jdbcType=VARCHAR},
+      </if>
+      <if test="cityId != null" >
+        city_id = #{cityId,jdbcType=INTEGER},
+      </if>
+      <if test="sellDealershipNum != null" >
+        sell_dealership_num = #{sellDealershipNum,jdbcType=INTEGER},
+      </if>
+       <if test="dealershipNumAble != null" >
+        dealership_num_able = #{dealershipNumAble,jdbcType=INTEGER},
+      </if>
+      <if test="cityDealershipMoney != null" >
+        city_dealership_money = #{cityDealershipMoney,jdbcType=DECIMAL},
+      </if>
+      <if test="createdDate != null" >
+        created_date = #{createdDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatedDate != null" >
+        updated_date = #{updatedDate,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where city_dealership_id = #{cityDealershipId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.zaijiadd.app.applyflow.entity.CityDealership" >
+    update city_dealership
+    set city_type = #{cityType,jdbcType=VARCHAR},
+      city_id = #{cityId,jdbcType=INTEGER},
+      sell_dealership_num = #{sellDealershipNum,jdbcType=INTEGER},
+      city_dealership_money = #{cityDealershipMoney,jdbcType=DECIMAL},
+      created_date = #{createdDate,jdbcType=TIMESTAMP},
+      updated_date = #{updatedDate,jdbcType=TIMESTAMP}
+    where city_dealership_id = #{cityDealershipId,jdbcType=INTEGER}
+  </update>
+</mapper>

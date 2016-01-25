@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zaijiadd.app.applyflow.dao.CuserMapper" >
+  <resultMap id="BaseResultMap" type="com.zaijiadd.app.applyflow.entity.Cuser" >
+    <id column="userid" property="userid" jdbcType="INTEGER" />
+    <result column="NAME" property="name" jdbcType="VARCHAR" />
+  </resultMap>
+  
+    <resultMap type="cuser" id="selectUserOrderByUIdMap" extends="BaseResultMap">
+  <collection property="corderList" ofType="corder">
+  		<id column="DETAIL_ID" property="detailId" jdbcType="INTEGER" />
+	     <id column="orderid" property="orderid" jdbcType="INTEGER" />
+   		 <result column="NAME" property="name" jdbcType="VARCHAR" />
+    	<result column="money" property="money" jdbcType="VARCHAR" />
+   		 <result column="userid" property="userid" jdbcType="INTEGER" />
+  	</collection>
+  </resultMap>
+  
+  
+  <sql id="Base_Column_List" >
+    userid, NAME
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from cuser
+    where userid = #{userid,jdbcType=INTEGER}
+  </select>
+  
+   <select id="selectUserOrderByUId" resultType="cuser" parameterType="java.lang.Integer" >
+    select 
+   cu.userid,cu.NAME,co.orderid,co.NAME,co.money
+    from cuser cu, corder co 
+    where cu.userid=co.userid and cu.userid = #{userid,jdbcType=INTEGER}
+  </select>
+  
+  
+     <select id="selectUserOrderByUIdMap" resultMap="selectUserOrderByUIdMap" parameterType="java.lang.Integer" >
+    select 
+   cu.userid,cu.NAME,co.orderid,co.NAME,co.money
+    from cuser cu, corder co 
+    where cu.userid=co.userid and cu.userid = #{userid,jdbcType=INTEGER}
+  </select>
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from cuser
+    where userid = #{userid,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.zaijiadd.app.applyflow.entity.Cuser" >
+    insert into cuser (userid, NAME)
+    values (#{userid,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.zaijiadd.app.applyflow.entity.Cuser" >
+    insert into cuser
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="userid != null" >
+        userid,
+      </if>
+      <if test="name != null" >
+        NAME,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="userid != null" >
+        #{userid,jdbcType=INTEGER},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.zaijiadd.app.applyflow.entity.Cuser" >
+    update cuser
+    <set >
+      <if test="name != null" >
+        NAME = #{name,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where userid = #{userid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.zaijiadd.app.applyflow.entity.Cuser" >
+    update cuser
+    set NAME = #{name,jdbcType=VARCHAR}
+    where userid = #{userid,jdbcType=INTEGER}
+  </update>
+</mapper>
